@@ -1,0 +1,16 @@
+{
+  "name": "booplugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@wordpress/blocks": "^11.9.0",
+    "@wordpress/scripts": "^23.2.0",
+    "react": "^17.0.2"
+  }
+}

@@ -1,12 +1,14 @@
 <?php
 
 /**
+ * Plugin Name: Test React Blocks
+ * Version: 1.0.0
  * Author: Faylee!
  */
 
 defined("ABSPATH") || exit;
 
-function registerMyReactBlockAssets() {
+function register_my_react_blocks_assets() {
     $asset_file = include(plugin_dir_path(__FILE__)."build/index.asset.php");
     wp_register_script(
         "my-react-blocks-scripts",
