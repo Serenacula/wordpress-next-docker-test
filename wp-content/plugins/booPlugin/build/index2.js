@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/edit.jsx":
-/*!**********************!*\
-  !*** ./src/edit.jsx ***!
-  \**********************/
+/***/ "./src/block/edit.jsx":
+/*!****************************!*\
+  !*** ./src/block/edit.jsx ***!
+  \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -14,42 +14,92 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 
-
-/**
- * WordPress dependencies
- */
-//  import { __ } from '@wordpress/i18n';
-
-
+const {
+  InspectorControls,
+  MediaUpload,
+  MediaUploadCheck
+} = wp.blockEditor;
+const {
+  PanelBody,
+  Button,
+  ResponsiveWrapper
+} = wp.components;
 function edit(props) {
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, "react works!");
+  const {
+    attributes,
+    setAttributes
+  } = props;
+
+  const removeMedia = () => {
+    props.setAttributes({
+      mediaId: 0,
+      mediaUrl: ""
+    });
+  };
+
+  const onSelectMedia = media => {
+    props.setAttributes({
+      mediaId: media.id,
+      mediaUrl: media.url
+    });
+  };
+
+  const blockStyle = {
+    width: "100%",
+    height: "400px"
+  };
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelBody, {
+    title: "Select the image",
+    initialOpen: true
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "editor-post-featured-image"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUploadCheck, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUpload, {
+    onSelect: onSelectMedia,
+    value: attributes.mediaId // Only allow images when selecting media
+    ,
+    allowedTypes: ["image"] // How to actually render this component
+    ,
+    render: _ref => {
+      let {
+        open
+      } = _ref;
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+        className: attributes.mediaId == 0 ? "editor-post-featured-image__toggle" : "editor-post-featured-image__preview",
+        onClick: open
+      }, attributes.mediaId == 0 && "Choose an image", props.media != undefined && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ResponsiveWrapper, {
+        naturalWidth: props.media.media_details.width,
+        naturalHeight: props.media.media_details.height
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+        src: props.media.source_url
+      })));
+    }
+  })), attributes.mediaId != 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUploadCheck, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUpload, {
+    title: "Replace image",
+    value: attributes.mediaId,
+    onSelect: onSelectMedia,
+    allowedTypes: ["image"],
+    render: _ref2 => {
+      let {
+        open
+      } = _ref2;
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+        onClick: open,
+        isDefault: true,
+        isLarge: true
+      }, "Replace image");
+    }
+  })), attributes.mediaId != 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUploadCheck, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+    onClick: removeMedia,
+    isLink: true,
+    isDestructive: true
+  }, "Remove image"))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    className: "edit image",
+    src: attributes.mediaUrl != "" ? attributes.mediaUrl : "",
+    alt: "",
+    style: blockStyle
+  }));
 }
-;
-
-/***/ }),
-
-/***/ "@wordpress/block-editor":
-/*!*************************************!*\
-  !*** external ["wp","blockEditor"] ***!
-  \*************************************/
-/***/ ((module) => {
-
-module.exports = window["wp"]["blockEditor"];
-
-/***/ }),
-
-/***/ "@wordpress/components":
-/*!************************************!*\
-  !*** external ["wp","components"] ***!
-  \************************************/
-/***/ ((module) => {
-
-module.exports = window["wp"]["components"];
 
 /***/ }),
 
@@ -134,11 +184,11 @@ module.exports = window["wp"]["element"];
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!************************!*\
-  !*** ./src/index2.jsx ***!
-  \************************/
+/*!*******************************!*\
+  !*** ./src/block2/index2.jsx ***!
+  \*******************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./edit */ "./src/edit.jsx");
+/* harmony import */ var _block_edit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../block/edit */ "./src/block/edit.jsx");
  // const {registerBlockType} = wp.blocks
 // Register the block
 
@@ -146,8 +196,8 @@ wp.blocks.registerBlockType('faylee/test-block2', {
   title: "Faylee's test block2",
   icon: "hammer",
   description: "describing the test block",
-  category: "design",
-  edit: _edit__WEBPACK_IMPORTED_MODULE_0__["default"],
+  category: "text",
+  edit: _block_edit__WEBPACK_IMPORTED_MODULE_0__["default"],
   save: function () {
     return null;
   }

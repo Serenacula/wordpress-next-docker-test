@@ -1,4 +1,4 @@
-import edit from './edit';
+import edit from '../block/edit';
 
 
 // const {registerBlockType} = wp.blocks
@@ -8,7 +8,7 @@ import edit from './edit';
      title: "Faylee's test block2",
      icon: "hammer",
      description: "describing the test block",
-     category: "design",
+     category: "text",
      edit: edit,
      save: function() {return null}
  } );
