@@ -17,8 +17,11 @@ services:
     wordpress:
         depends_on:
             - db
-        image: wordpress:latest
-        working_dir: /var/www/html/wp-content
+        # image: wordpress:latest
+        build: 
+          dockerfile: ./wp.Dockerfile
+          context: .
+        # working_dir: /var/www/html/wp-content
         volumes:
             - wordpress_data:/var/www/html
             - ./wp-content:/var/www/html/wp-content
@@ -31,16 +34,14 @@ services:
             WORDPRESS_DB_PASSWORD: wordpress
             WORDPRESS_DB_NAME: wordpress
 
-    next:
-        ports:
-            - 3000:3000
-        build:
-            dockerfile: Dockerfile
-            context: .
-        volumes:
-            - ./next:/usr/src/app
-            - /usr/src/app/node_modules
-            - /usr/src/app/.next
+    # next:
+    #     ports:
+    #         - 3000:3000
+    #     build: next.Dockerfile
+    #     volumes:
+    #         - ./next:/usr/src/app
+    #         - /usr/src/app/node_modules
+    #         - /usr/src/app/.next
         # entrypoint: ["/bin/bash"]
         # stdin_open: true
         # tty: true
