@@ -10,7 +10,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ edit)
+/* harmony export */   "default": () => (/* binding */ Edit)
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
@@ -25,21 +25,22 @@ const {
   Button,
   ResponsiveWrapper
 } = wp.components;
-function edit(props) {
+function Edit(wrapperProps) {
+  const props = wrapperProps.props;
   const {
     attributes,
     setAttributes
   } = props;
 
   const removeMedia = () => {
-    props.setAttributes({
+    setAttributes({
       mediaId: 0,
       mediaUrl: ""
     });
   };
 
   const onSelectMedia = media => {
-    props.setAttributes({
+    setAttributes({
       mediaId: media.id,
       mediaUrl: media.url
     });
@@ -93,12 +94,37 @@ function edit(props) {
     onClick: removeMedia,
     isLink: true,
     isDestructive: true
-  }, "Remove image"))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-    className: "edit image",
-    src: attributes.mediaUrl != "" ? attributes.mediaUrl : "",
+  }, "Remove image"))))));
+}
+
+/***/ }),
+
+/***/ "./src/block/image.jsx":
+/*!*****************************!*\
+  !*** ./src/block/image.jsx ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Image)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+
+function Image(wrapperProps) {
+  const props = wrapperProps.props;
+  console.log(props);
+  const blockStyle = {
+    width: "100%",
+    height: "400px"
+  };
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    className: "save image",
+    src: props.attributes.mediaUrl != "" ? props.attributes.mediaUrl : "",
     alt: "",
     style: blockStyle
-  }));
+  });
 }
 
 /***/ }),
@@ -191,40 +217,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit */ "./src/block/edit.jsx");
+/* harmony import */ var _image__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./image */ "./src/block/image.jsx");
 
- // const {registerBlockType} = wp.blocks
 
-console.log("running index.js"); // Register the block
+
+/**
+ * Okay so, I THINK what happens is that when we select an image in the editor with onSelectMedia, withSelect automatically
+ * updates the media prop to the new image.
+ */
+
+console.log("running index.js"); // Wrapper's job is basically just to bundle the Image and Edit panel, since we can only pass a single react component to withSelect.
+// Unfortunately this means we end up with an awkward props.props, but I don't really see a way to stop that unless we wanna
+// pass all the props individually.
+
+function Wrapper(props) {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_image__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    props: props
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_edit__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    props: props
+  }));
+} // Register the block
+
 
 wp.blocks.registerBlockType("faylee/test-block", {
   title: "Faylee's test block",
   icon: "hammer",
   description: "describing the test block",
   category: "text",
-  // withSelect is a higher order function that allows you to perform queries
-  edit: wp.data.withSelect((edit, props) => {
-    // const imageComponent = (
-    //     <img
-    //         src={attributes.mediaUrl != "" ? attributes.mediaUrl : ""}
-    //         alt=""
-    //         style={blockStyle}
-    //     />
-    // )
+  // Okay, so this function basically just has 1 job, which is to convert the mediaId into the media property.
+  // The media property is then added to the props of Wrapper, which is called.
+  edit: wp.data.withSelect((select, props) => {
     return {
-      media: props.attributes.mediaId ? edit("core").getMedia(props.attributes.mediaId) : undefined
+      // IF there is a media target, GET the media from the database and call it media.
+      media: props.attributes?.mediaId ? select("core").getMedia(props.attributes.mediaId) : undefined
     };
-  })(_edit__WEBPACK_IMPORTED_MODULE_1__["default"]),
-  save: () => {
-    const props = wp.blockEditor.useBlockProps.save();
-    console.log(props);
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-      className: "save image",
-      src: props.attributes.mediaUrl != "" ? props.attributes.mediaUrl : "",
-      alt: "",
-      style: {
-        width: "100%",
-        height: "400px"
-      }
+  })(Wrapper),
+  save: props => {
+    // Okay, this function receives the attributes below and passes them to Image
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_image__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      props: props
     });
   },
   attributes: {

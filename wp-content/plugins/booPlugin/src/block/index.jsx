@@ -1,7 +1,24 @@
-import edit from "./edit"
-// const {registerBlockType} = wp.blocks
+import Edit from "./edit"
+import Image from "./image"
+
+/**
+ * Okay so, I THINK what happens is that when we select an image in the editor with onSelectMedia, withSelect automatically
+ * updates the media prop to the new image.
+ */
 
 console.log("running index.js")
+
+// Wrapper's job is basically just to bundle the Image and Edit panel, since we can only pass a single react component to withSelect.
+// Unfortunately this means we end up with an awkward props.props, but I don't really see a way to stop that unless we wanna
+// pass all the props individually.
+function Wrapper(props) {
+    return (
+        <>
+            <Image props={props} />
+            <Edit props={props} />
+        </>
+    )
+}
 
 // Register the block
 wp.blocks.registerBlockType("faylee/test-block", {
@@ -9,40 +26,19 @@ wp.blocks.registerBlockType("faylee/test-block", {
     icon: "hammer",
     description: "describing the test block",
     category: "text",
-    // withSelect is a higher order function that allows you to perform queries
-    edit: wp.data.withSelect((edit, props) => {
-        // const imageComponent = (
-        //     <img
-        //         src={attributes.mediaUrl != "" ? attributes.mediaUrl : ""}
-        //         alt=""
-        //         style={blockStyle}
-        //     />
-        // )
-
+    // Okay, so this function basically just has 1 job, which is to convert the mediaId into the media property.
+    // The media property is then added to the props of Wrapper, which is called.
+    edit: wp.data.withSelect((select, props) => {
         return {
-            media: props.attributes.mediaId
-                ? edit("core").getMedia(props.attributes.mediaId)
+            // IF there is a media target, GET the media from the database and call it media.
+            media: props.attributes?.mediaId
+                ? select("core").getMedia(props.attributes.mediaId)
                 : undefined,
         }
-    })(edit),
-    save: () => {
-        const props = wp.blockEditor.useBlockProps.save()
-        console.log(props)
-        return (
-            <img
-                className="save image"
-                src={
-                    props.attributes.mediaUrl != ""
-                        ? props.attributes.mediaUrl
-                        : ""
-                }
-                alt=""
-                style={{
-                    width: "100%",
-                    height: "400px",
-                }}
-            />
-        )
+    })(Wrapper),
+    save: (props) => {
+        // Okay, this function receives the attributes below and passes them to Image
+        return <Image props={props} />
     },
     attributes: {
         mediaId: {

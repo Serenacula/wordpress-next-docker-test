@@ -1,18 +1,19 @@
 const { InspectorControls, MediaUpload, MediaUploadCheck } = wp.blockEditor
 const { PanelBody, Button, ResponsiveWrapper } = wp.components
 
-export default function edit(props) {
+export default function Edit(wrapperProps) {
+    const props = wrapperProps.props
     const { attributes, setAttributes } = props
 
     const removeMedia = () => {
-        props.setAttributes({
+        setAttributes({
             mediaId: 0,
             mediaUrl: "",
         })
     }
 
     const onSelectMedia = (media) => {
-        props.setAttributes({
+        setAttributes({
             mediaId: media.id,
             mediaUrl: media.url,
         })
@@ -105,12 +106,15 @@ export default function edit(props) {
                     </div>
                 </PanelBody>
             </InspectorControls>
-            <img
-                className="edit image"
-                src={attributes.mediaUrl != "" ? attributes.mediaUrl : ""}
-                alt=""
-                style={blockStyle}
-            />
+            {/* <>
+                <p>react block</p>
+                <img
+                    className="save image"
+                    src={attributes.mediaUrl != "" ? attributes.mediaUrl : ""}
+                    alt=""
+                    style={blockStyle}
+                />
+            </> */}
         </>
     )
 }

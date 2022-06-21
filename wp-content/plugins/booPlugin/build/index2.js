@@ -10,7 +10,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ edit)
+/* harmony export */   "default": () => (/* binding */ Edit)
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
@@ -25,21 +25,22 @@ const {
   Button,
   ResponsiveWrapper
 } = wp.components;
-function edit(props) {
+function Edit(wrapperProps) {
+  const props = wrapperProps.props;
   const {
     attributes,
     setAttributes
   } = props;
 
   const removeMedia = () => {
-    props.setAttributes({
+    setAttributes({
       mediaId: 0,
       mediaUrl: ""
     });
   };
 
   const onSelectMedia = media => {
-    props.setAttributes({
+    setAttributes({
       mediaId: media.id,
       mediaUrl: media.url
     });
@@ -93,12 +94,7 @@ function edit(props) {
     onClick: removeMedia,
     isLink: true,
     isDestructive: true
-  }, "Remove image"))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-    className: "edit image",
-    src: attributes.mediaUrl != "" ? attributes.mediaUrl : "",
-    alt: "",
-    style: blockStyle
-  }));
+  }, "Remove image"))))));
 }
 
 /***/ }),
