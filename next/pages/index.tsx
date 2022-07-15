@@ -72,7 +72,7 @@ const Home: NextPage = () => {
     )
 }
 
-export async function getServerSideProps(props) {
+export async function getServerSideProps(props: any) {
     console.log(props);
 
     // const apolloClient = initializeApollo()
