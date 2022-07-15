@@ -18,9 +18,9 @@ services:
         depends_on:
             - db
         # image: wordpress:latest
-        build: 
-          dockerfile: ./wp.Dockerfile
-          context: .
+        build:
+            dockerfile: ./wp.Dockerfile
+            context: .
         # working_dir: /var/www/html/wp-content
         volumes:
             - wordpress_data:/var/www/html
@@ -33,18 +33,22 @@ services:
             WORDPRESS_DB_USER: wordpress
             WORDPRESS_DB_PASSWORD: wordpress
             WORDPRESS_DB_NAME: wordpress
+            WORDPRESS_DEBUG: 1
+            WORDPRESS_CONFIG_EXTRA: |
+                define( 'WP_DEBUG', true );
+                define( 'GRAPHQL_DEBUG', true );
 
-    # next:
-    #     ports:
-    #         - 3000:3000
-    #     build: next.Dockerfile
-    #     volumes:
-    #         - ./next:/usr/src/app
-    #         - /usr/src/app/node_modules
-    #         - /usr/src/app/.next
-        # entrypoint: ["/bin/bash"]
-        # stdin_open: true
-        # tty: true
+    next:
+        ports:
+            - 3000:3000
+        build: next.Dockerfile
+        volumes:
+            - ./next:/usr/src/app
+            - /usr/src/app/node_modules
+            - /usr/src/app/.next
+        entrypoint: ["/bin/bash"]
+        stdin_open: true
+        tty: true
 
 volumes:
     db_data: {}
